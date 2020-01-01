@@ -16,7 +16,7 @@ function getYearProgress() {
 }
 function getProgressBar(progress) {
   const roundedProgress = Math.ceil(progress);
-  const totalSlots = 15;
+  const totalSlots = 10;
   const fullSlots = Math.ceil((roundedProgress * totalSlots) / 100);
   const emptySlots = totalSlots - fullSlots;
   const unicodeFull = "⬛";

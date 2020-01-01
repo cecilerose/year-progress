@@ -1,0 +1,15 @@
+{
+  "name": "year-progress",
+  "version": "1.0.0",
+  "description": "a twitter bot that tweets the year progress",
+  "main": "index.js",
+  "author": "cecile dayan",
+  "license": "MIT",
+  "scripts": {
+    "tweet": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "twitter-lite": "^0.9.4"
+  }
+}

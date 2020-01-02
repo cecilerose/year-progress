@@ -19,8 +19,8 @@ function getProgressBar(progress) {
   const totalSlots = 10;
   const fullSlots = Math.ceil((roundedProgress * totalSlots) / 100);
   const emptySlots = totalSlots - fullSlots;
-  const unicodeFull = "⬛";
-  const unicodeEmpty = "⬜";
+  const unicodeFull = "🔵";
+  const unicodeEmpty = "⚪️";
   const barFull = unicodeFull.repeat(fullSlots);
   const barEmpty = unicodeEmpty.repeat(emptySlots);
 

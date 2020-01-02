@@ -1,5 +1,7 @@
+const fs = require("fs");
 const Twitter = require("twitter-lite");
 const dotenv = require("dotenv");
+const log = require("./log.json");
 
 dotenv.config();
 
@@ -15,7 +17,7 @@ function getYearProgress() {
   return yearProgress;
 }
 function getProgressBar(progress) {
-  const roundedProgress = Math.ceil(progress);
+  const roundedProgress = progress;
   const totalSlots = 10;
   const fullSlots = Math.ceil((roundedProgress * totalSlots) / 100);
   const emptySlots = totalSlots - fullSlots;
@@ -26,9 +28,14 @@ function getProgressBar(progress) {
 
   return `${barFull}${barEmpty} ${roundedProgress}%`;
 }
+function hasPercentageChanged(percentage) {
+  const arePercentagesTheSame = log.percentage === percentage;
+  return !arePercentagesTheSame;
+}
 
-const yearProgress = getYearProgress();
+const yearProgress = Math.ceil(getYearProgress());
 const progressBar = getProgressBar(yearProgress);
+const percentageHasChanged = hasPercentageChanged(yearProgress);
 
 const client = new Twitter({
   consumer_key: process.env.CONSUMER_KEY,
@@ -37,9 +44,23 @@ const client = new Twitter({
   access_token_secret: process.env.ACCESS_TOKEN_SECRET
 });
 
-client
+if (percentageHasChanged) {
+  client
   .post("statuses/update", {
     status: progressBar
   })
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+  .then(data => {
+    console.log(data);
+    
+    const newLog = {
+      percentage: yearProgress
+    };
+
+    fs.writeFileSync("log.json", JSON.stringify(newLog));
+  })
+  .catch(err => {
+    console.error("errors:", err.errors.map(error => error.message).join(", "));
+  });
+} else {
+  console.log("the percentage has not changed, quitting.");
+}
